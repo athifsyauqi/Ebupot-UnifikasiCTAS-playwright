@@ -1,0 +1,18 @@
+{
+  "taxPeriod": "Maret 2026",
+  "withholdingDateDay": 1,
+  "counterpartySearch": "0941650236023000",
+  "counterpartyLabel": "NAMA0941650236023000 - 0941650236023000",
+  "taxType": "Pasal 23",
+  "taxObjectSearch": "24-104-08",
+  "taxObjectLabel": "24-104-08 Jasa Arsitektur",
+  "grossIncome": "100000",
+  "documentType": "Pengumuman",
+  "documentDate": {
+    "day": 1,
+    "month": "Maret",
+    "year": 2026
+  },
+  "successMessage": "Bupot berhasil dibuat"
+}
+

@@ -1,0 +1,5 @@
+{
+  "searchNoBupot": "BUPOT-2026-0001",
+  "draftName": "Draft Upload Single WPDN",
+  "uploadFilePath": "tests/fixtures/files/sample-upload.xlsx"
+}
