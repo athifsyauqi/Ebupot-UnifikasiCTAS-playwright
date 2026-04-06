@@ -13,9 +13,14 @@ export async function openWpdnModule(args: Parameters<typeof test.beforeEach>[0]
     locator(selector: string): {
       clear(): Promise<void>;
       fill(value: string): Promise<void>;
+      click(): Promise<void>;
     };
     getByRole(role: 'button', options: { name: RegExp }): {
       click(): Promise<void>;
+    };
+    getByPlaceholder(value: string): {
+      clear(): Promise<void>;
+      fill(value: string): Promise<void>;
     };
     waitForURL(url: RegExp, options?: { timeout?: number }): Promise<void>;
   };
@@ -28,15 +33,16 @@ export async function openWpdnModule(args: Parameters<typeof test.beforeEach>[0]
   };
 }): Promise<void> {
   const companyNpwp = process.env.COMPANY_NPWP ?? '0717166367077000';
-  const username = requireEnv('USERNAME');
+  const loginUrl = process.env.LOGIN_URL ?? '/login';
+  const username = requireEnv('APP_USERNAME');
   const password = requireEnv('PASSWORD');
 
   // Step 1: Login ke aplikasi.
-  await args.page.goto('/login', { waitUntil: 'domcontentloaded' });
-  await args.page.locator('input[placeholder="email@anda.com"]').clear();
-  await args.page.locator('input[placeholder="email@anda.com"]').fill(username);
-  await args.page.locator('input[placeholder="Masukkan password"]').clear();
-  await args.page.locator('input[placeholder="Masukkan password"]').fill(password);
+  await args.page.goto(loginUrl, { waitUntil: 'domcontentloaded' });
+  await args.page.getByPlaceholder('email@contoh.com atau 081234567890').clear();
+  await args.page.getByPlaceholder('email@contoh.com atau 081234567890').fill(username);
+  await args.page.getByPlaceholder('********').clear();
+  await args.page.getByPlaceholder('********').fill(password);
   await args.page.getByRole('button', { name: /^Masuk$/i }).click();
   await args.page.waitForURL(/\/dashboard/, { timeout: 15_000 });
 

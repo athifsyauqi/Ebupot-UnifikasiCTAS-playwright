@@ -11,13 +11,13 @@ async function dismissSessionExpiredModalIfPresent(page: import('@playwright/tes
 }
 
 async function globalSetup(config: FullConfig): Promise<void> {
-  const username = process.env.USERNAME;
+  const username = process.env.APP_USERNAME;
   const password = process.env.PASSWORD;
   const loginPath = process.env.LOGIN_URL ?? '/login';
   const baseURL = config.projects[0]?.use?.baseURL;
 
   if (!baseURL || !username || !password) {
-    console.log('Global setup skipped: BASE_URL, USERNAME, or PASSWORD is missing.');
+    console.log('Global setup skipped: BASE_URL, APP_USERNAME, or PASSWORD is missing.');
     return;
   }
 
@@ -27,10 +27,13 @@ async function globalSetup(config: FullConfig): Promise<void> {
 
   await page.goto(`${baseURL}${loginPath}`, { waitUntil: 'domcontentloaded' });
   await dismissSessionExpiredModalIfPresent(page);
-  await page.locator('#signin-email').waitFor({ state: 'visible', timeout: 60_000 });
-  await page.locator('#signin-email').fill(username);
-  await page.locator('#signin-passowrd').fill(password);
-  await page.locator('#signin-button').click();
+  await page.getByPlaceholder('email@contoh.com atau 081234567890').waitFor({
+    state: 'visible',
+    timeout: 60_000
+  });
+  await page.getByPlaceholder('email@contoh.com atau 081234567890').fill(username);
+  await page.getByPlaceholder('********').fill(password);
+  await page.getByRole('button', { name: /^Masuk$/i }).click();
   await page.waitForURL(/\/dashboard/, { timeout: 60_000 });
 
   await page.context().storageState({ path: storagePath });

@@ -8,12 +8,12 @@ type AuthFixtures = {
 export const test = base.extend<AuthFixtures>({
   ensureAuthenticated: [
     async ({ dashboardPage, loginPage, page }, use: (value: void) => Promise<void>) => {
-      const username = process.env.USERNAME;
+      const username = process.env.APP_USERNAME;
       const password = process.env.PASSWORD;
 
       if (username && password) {
         await loginPage.open();
-        await loginPage.loginIfVisible(requireEnv('USERNAME'), requireEnv('PASSWORD'));
+        await loginPage.loginIfVisible(requireEnv('APP_USERNAME'), requireEnv('PASSWORD'));
         await loginPage.expectLoginSuccess();
         await dashboardPage.expectLoaded();
         await expect(page).not.toHaveURL(/login/i);

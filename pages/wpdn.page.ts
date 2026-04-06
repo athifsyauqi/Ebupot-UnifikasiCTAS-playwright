@@ -39,7 +39,13 @@ export class WpdnPage {
   // Fungsi: memilih tanggal pemotongan dari datepicker.
   async chooseWithholdingDate(day: number): Promise<void> {
     await this.page.locator('input[name="tanggal-pemotongan"]').click();
-    await this.page.locator('[role="dialog"]').first().getByRole('gridcell', { name: String(day), exact: true }).click();
+    await this.page
+      .locator('[role="dialog"]')
+      .first()
+      .locator('[role="gridcell"]:not([aria-disabled="true"])')
+      .filter({ hasText: new RegExp(`^${day}$`) })
+      .first()
+      .click();
     await this.closeDatepicker();
   }
 

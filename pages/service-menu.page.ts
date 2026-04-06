@@ -9,14 +9,12 @@ export class ServiceMenuPage {
       return;
     }
 
-    await expect(this.page.locator('#ebupot-unifikasi')).toBeVisible();
-    await this.page.locator('#ebupot-unifikasi > div.flex.items-center.item-side-nav').click();
+    const ebupotUnifikasiButton = this.page.getByRole('button', {
+      name: /^e-Bupot Unifikasi$/i
+    });
 
-    await expect(this.page.locator('#ebupot-unifikasi > div.sub-child')).toBeVisible();
-    await this.page
-      .locator('#ebupot-unifikasi > div.sub-child')
-      .getByText('e-Bupot Unifikasi CTAS')
-      .click();
+    await expect(ebupotUnifikasiButton).toBeVisible();
+    await ebupotUnifikasiButton.click();
 
     await expect(this.page).toHaveURL(/\/ctas-ebupot-unifikasi/);
   }

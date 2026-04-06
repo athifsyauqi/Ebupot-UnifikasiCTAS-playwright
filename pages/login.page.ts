@@ -3,6 +3,18 @@ import { expect, type Page } from '@playwright/test';
 export class LoginPage {
   constructor(private readonly page: Page) {}
 
+  private emailInput() {
+    return this.page.getByPlaceholder('email@contoh.com atau 081234567890');
+  }
+
+  private passwordInput() {
+    return this.page.getByPlaceholder('********');
+  }
+
+  private signInButton() {
+    return this.page.getByRole('button', { name: /^Masuk$/i });
+  }
+
   // Fungsi internal: menutup modal session-expired jika muncul di halaman login.
   async dismissSessionExpiredModalIfPresent(): Promise<void> {
     const backToSignInButton = this.page.getByRole('button', { name: /Kembali Sign In/i });
@@ -16,15 +28,15 @@ export class LoginPage {
   async open(): Promise<void> {
     await this.page.goto(process.env.LOGIN_URL ?? '/login', { waitUntil: 'domcontentloaded' });
     await this.dismissSessionExpiredModalIfPresent();
-    await this.page.locator('#signin-email').waitFor({ state: 'visible' });
+    await this.emailInput().waitFor({ state: 'visible' });
   }
 
   // Fungsi: mengisi email dan password lalu submit login.
   async login(username: string, password: string): Promise<void> {
     await this.dismissSessionExpiredModalIfPresent();
-    const emailInput = this.page.locator('#signin-email');
-    const passwordInput = this.page.locator('#signin-passowrd');
-    const signInButton = this.page.locator('#signin-button');
+    const emailInput = this.emailInput();
+    const passwordInput = this.passwordInput();
+    const signInButton = this.signInButton();
 
     await emailInput.waitFor({ state: 'visible' });
     await passwordInput.waitFor({ state: 'visible' });
@@ -62,7 +74,7 @@ export class LoginPage {
 
   // Fungsi: login hanya jika form login masih tampil.
   async loginIfVisible(username: string, password: string): Promise<void> {
-    const emailInput = this.page.locator('#signin-email');
+    const emailInput = this.emailInput();
 
     if (await emailInput.count()) {
       await this.login(username, password);
